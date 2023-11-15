@@ -17,7 +17,6 @@ class Renderer {
   public boolean leftPaddleUp;
   public boolean rightPaddleDown;
 
-  float[] ballData = { 0.02f, 0.02f, -0.02f, 0.02f, -0.02f, -0.02f, 0.02f, -0.02f };
 
 
 
@@ -102,11 +101,13 @@ public Renderer(){
 class Game{
   final Player playe1;
   final Player player2;
+  Ball ball;
   public Game(){
 
     // Start a game loop (for demonstration purposes)
     playe1=new Player(-0.9f);
     player2=new Player(0.9f);
+    ball=new Ball();
   }
   public void drawAll(GL2 gl)
   {
@@ -114,9 +115,30 @@ class Game{
     player2.drawBar(gl);
     playe1.drawScore(gl);
     player2.drawScore(gl);
+    ball.draw(gl);
 
   }
 
+
+}
+class Ball{
+
+  float[] ballData = { 0.02f, 0.02f, -0.02f, 0.02f, -0.02f, -0.02f, 0.02f, -0.02f };
+  float x=0,y=0,deltax=0.01f,deltay=0.01f;
+  public void draw(GL2 gl)
+  {
+
+    gl.glLoadIdentity();
+    gl.glTranslatef(x, 0, 0); // Translate to the right
+    gl.glBegin(GL_QUADS);
+
+    for (int i = 0; i < ballData.length-1; i+=2) {
+
+      gl.glVertex3f(ballData[i], ballData[i+1]+y, 0.0f);
+    }
+    ; // translate
+    gl.glEnd();
+  }
 
 }
 class Player{
