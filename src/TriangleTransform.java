@@ -47,6 +47,7 @@ class Renderer {
 
 
     gl.glClear(GL2.GL_COLOR_BUFFER_BIT);
+
     game.drawAll(gl);
 /*
     gl.glColor3f(0.0f, 0.0f, 1.0f);
@@ -111,7 +112,12 @@ class Game{
   {
     playe1.drawBar(gl);
     player2.drawBar(gl);
+    playe1.drawScore(gl);
+    player2.drawScore(gl);
+
   }
+
+
 }
 class Player{
 
@@ -138,7 +144,10 @@ class Player{
           0.01f, 0.05f, -0.01f, -0.05f, -0.01f, -0.05f, 0.01f};
 
   float[] barData = { 0.02f, 0.2f, -0.02f, 0.2f, -0.02f, -0.2f, 0.02f, -0.2f };
+  int score=0;
   float x,y;
+
+
   public Player(float x)
   {
     this.x=x;
@@ -151,6 +160,38 @@ class Player{
   {
     y-=0.01;
   }
+  void drawScore(GL2 gl)
+  {
+    float[] data;
+    if(score==0)
+      data=score0Data;
+    else if (score==1)
+      data=score1Data;
+    else if (score==2)
+      data=score2Data;
+    else
+      data=score3Data;
+    float f=-0.1f;
+    if(x>0)
+    {
+      f=0.1f;
+    }
+
+    gl.glLoadIdentity();
+    gl.glTranslatef(f, 0.9f, 0);
+    gl.glBegin(GL_QUADS);
+
+    for (int i = 0; i < data.length-1; i+=2) {
+
+      gl.glVertex3f(data[i], data[i+1], 0.0f);
+    }
+    ; // translate
+    gl.glEnd();
+  }
+
+
+
+
   public void drawBar(GL2 gl)
   {
 
@@ -221,7 +262,13 @@ class MyGui extends JFrame implements GLEventListener,KeyListener {
 
   @Override
   public void keyTyped(KeyEvent e) {
+    if(e.getKeyChar()=='9')
+    {
+      renderer.game.playe1.score++;
+      renderer.game.playe1.score=renderer.game.playe1.score%4;
+      System.out.println(renderer.game.playe1.score);
 
+    }
   }
   @Override
   public void keyPressed(KeyEvent e) {
@@ -240,6 +287,7 @@ class MyGui extends JFrame implements GLEventListener,KeyListener {
         break;
       case KeyEvent.VK_L:
         renderer.rightPaddleDown = true;
+
         break;
     }
   }
