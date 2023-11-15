@@ -16,83 +16,14 @@ class Renderer {
   public boolean leftPaddleDown;
   public boolean leftPaddleUp;
   public boolean rightPaddleDown;
-  float[] barData = { 0.02f, 0.2f, -0.02f, 0.2f, -0.02f, -0.2f, 0.02f, -0.2f };
 
   float[] ballData = { 0.02f, 0.02f, -0.02f, 0.02f, -0.02f, -0.02f, 0.02f, -0.02f };
 
-  float[] score0Data = { 0.06f, 0.1f, 0.04f, 0.1f, 0.04f, -0.1f, 0.06f,
-          -0.1f, -0.04f, 0.1f, -0.06f, 0.1f, -0.06f, -0.1f, -0.04f, -0.1f,
-          0.05f, 0.1f, 0.05f, 0.08f, -0.05f, 0.08f, -0.05f, 0.1f, 0.05f,
-          -0.08f, 0.05f, -0.1f, -0.05f, -0.1f, -0.05f, -0.08f };
-
-  float[] score1Data = { 0.01f, 0.1f, -0.01f, 0.1f, -0.01f, -0.1f, 0.01f,
-          -0.1f };
-
-  float[] score2Data = { 0.06f, 0.1f, 0.04f, 0.1f, 0.04f, 0.0f,
-          0.06f, 0.0f, -0.04f, 0.0f, -0.06f, 0.0f,
-          -0.06f, -0.1f, -0.04f, -0.1f, 0.05f, 0.1f, 0.05f,
-          0.08f, -0.05f, 0.08f, -0.05f, 0.1f, 0.05f, -0.08f, 0.05f,
-          -0.1f, -0.05f, -0.1f, -0.05f, -0.08f, 0.05f,
-          0.01f, 0.05f, -0.01f, -0.05f, -0.01f, -0.05f,
-          0.01f };
-
-  float[] score3Data = { 0.06f, 0.1f, 0.04f, 0.1f, 0.04f, -0.1f, 0.06f,
-          -0.1f, 0.05f, 0.1f, 0.05f, 0.08f, -0.05f, 0.08f, -0.05f, 0.1f,
-          0.05f, -0.08f, 0.05f, -0.1f, -0.05f, -0.1f, -0.05f, -0.08f, 0.05f,
-          0.01f, 0.05f, -0.01f, -0.05f, -0.01f, -0.05f, 0.01f};
-
-  private void drawzero(GL2 gl) {
-    gl.glBegin(GL_QUADS);
-
-    for (int i = 0; i < score0Data.length-1; i+=2) {
-
-      gl.glVertex3f(score0Data[i], score0Data[i+1], 0.0f);
-    }
-
-    gl.glEnd();
-  }
-  
-  float x=0f;
-  float y=0f;
-
-  private void drawOne(GL2 gl) {
-
-    gl.glTranslatef(0.8f, 0.5f, 0.0f); // translate
-    gl.glBegin(GL_QUADS);
-
-    for (int i = 0; i < score1Data.length-1; i+=2) {
-
-      gl.glVertex3f(score1Data[i], score1Data[i+1], 0.0f);
-    }
-
-    gl.glEnd();
-
-    gl.glTranslatef(-0.8f, -0.5f-x, 0.0f); // translate
-  }
-
-  private void drawBarPlayer1(GL2 gl) {
-
-    gl.glBegin(GL_QUADS);
-
-    for (int i = 0; i < barData.length-1; i+=2) {
-
-      gl.glVertex3f(barData[i], barData[i+1]+x, 0.0f);
-    }
 
 
-    gl.glEnd();
+Player playe1,player2;
 
-  }
-  private void drawBarPlayer2(GL2 gl) {
-    gl.glBegin(GL_QUADS);
 
-    for (int i = 0; i < barData.length-1; i+=2) {
-
-      gl.glVertex3f(barData[i], barData[i+1]+y, 0.0f);
-    }
-; // translate
-    gl.glEnd();
-  }
   int width,height;
   public void init(GLAutoDrawable d) {
 
@@ -119,14 +50,10 @@ class Renderer {
     gl.glClear(GL2.GL_COLOR_BUFFER_BIT);
 
     // Draw the shape on the right
-    gl.glLoadIdentity();
-    gl.glTranslatef(0.9f, 0, 0); // Translate to the right
-    drawBarPlayer1(gl);
+    playe1.drawBar(gl);
 
     // Draw the shape on the left
-    gl.glLoadIdentity();
-    gl.glTranslatef(-0.9f, 0, 0); // Translate to the left
-    drawBarPlayer2(gl);
+    player2.drawBar(gl);
 
 /*
     gl.glColor3f(0.0f, 0.0f, 1.0f);
@@ -147,7 +74,8 @@ class Renderer {
 public Renderer(){
 
   // Start a game loop (for demonstration purposes)
-
+playe1=new Player(-0.9f);
+player2=new Player(0.9f);
 }
 
 
@@ -158,30 +86,75 @@ public Renderer(){
     if (leftPaddleUp) {
       // Move left paddle up
       // Add your logic here to update the left paddle position
-      x+=0.01f;
+      playe1.moveUp();
     } else if (leftPaddleDown) {
       // Move left paddle down
       // Add your logic here to update the left paddle position
-      x-=0.01f;
+      playe1.movedown();
     }
 
     // Update right paddle position
     if (rightPaddleUp) {
       // Move right paddle up
       // Add your logic here to update the right paddle position
-      y+=0.01f;
+    player2.moveUp();
     } else if (rightPaddleDown) {
       // Move right paddle down
       // Add your logic here to update the right paddle position
-      y-=0.01f;
+      player2.movedown();
     }
   }
 }
 class Player{
+
+  float[] score0Data = { 0.06f, 0.1f, 0.04f, 0.1f, 0.04f, -0.1f, 0.06f,
+          -0.1f, -0.04f, 0.1f, -0.06f, 0.1f, -0.06f, -0.1f, -0.04f, -0.1f,
+          0.05f, 0.1f, 0.05f, 0.08f, -0.05f, 0.08f, -0.05f, 0.1f, 0.05f,
+          -0.08f, 0.05f, -0.1f, -0.05f, -0.1f, -0.05f, -0.08f };
+
+  float[] score1Data = { 0.01f, 0.1f, -0.01f, 0.1f, -0.01f, -0.1f, 0.01f,
+          -0.1f };
+
+  float[] score2Data = { 0.06f, 0.1f, 0.04f, 0.1f, 0.04f, 0.0f,
+          0.06f, 0.0f, -0.04f, 0.0f, -0.06f, 0.0f,
+          -0.06f, -0.1f, -0.04f, -0.1f, 0.05f, 0.1f, 0.05f,
+          0.08f, -0.05f, 0.08f, -0.05f, 0.1f, 0.05f, -0.08f, 0.05f,
+          -0.1f, -0.05f, -0.1f, -0.05f, -0.08f, 0.05f,
+          0.01f, 0.05f, -0.01f, -0.05f, -0.01f, -0.05f,
+          0.01f };
+
+  float[] score3Data = { 0.06f, 0.1f, 0.04f, 0.1f, 0.04f, -0.1f, 0.06f,
+          -0.1f, 0.05f, 0.1f, 0.05f, 0.08f, -0.05f, 0.08f, -0.05f, 0.1f,
+          0.05f, -0.08f, 0.05f, -0.1f, -0.05f, -0.1f, -0.05f, -0.08f, 0.05f,
+          0.01f, 0.05f, -0.01f, -0.05f, -0.01f, -0.05f, 0.01f};
+
+  float[] barData = { 0.02f, 0.2f, -0.02f, 0.2f, -0.02f, -0.2f, 0.02f, -0.2f };
   float x,y;
+  public Player(float x)
+  {
+    this.x=x;
+  }
+  public void moveUp()
+  {
+    y+=0.01;
+  }
+  public void movedown()
+  {
+    y-=0.01;
+  }
   public void drawBar(GL2 gl)
   {
 
+    gl.glLoadIdentity();
+    gl.glTranslatef(x, 0, 0); // Translate to the right
+    gl.glBegin(GL_QUADS);
+
+    for (int i = 0; i < barData.length-1; i+=2) {
+
+      gl.glVertex3f(barData[i], barData[i+1]+y, 0.0f);
+    }
+    ; // translate
+    gl.glEnd();
   }
 }
 
