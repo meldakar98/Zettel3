@@ -21,11 +21,13 @@ class Renderer {
 
 
 
-Player playe1,player2;
 
 
   int width,height;
+  Game game;
   public void init(GLAutoDrawable d) {
+
+
 
   }
   public void resize(GLAutoDrawable d, int width, int height) {
@@ -36,25 +38,16 @@ Player playe1,player2;
   }
   public void display(GLAutoDrawable d) {
     GL2 gl = d.getGL().getGL2();  // get the OpenGL 2 graphics context
-/*
+
     gl.glClearColor(0.0f, 0.0f, 0.0f, 0.0f);
     gl.glClear(GL.GL_COLOR_BUFFER_BIT);
     gl.glLoadIdentity();
     gl.glOrtho(-1.0f, 1.0f, -1.0f, 1.0f, -1.0f, 1.0f);
     gl.glColor3f(1.0f, 1.0f, 1.0f);
-    drawzero(gl);
-    drawBarPlayer1(gl);
-   drawBarPlayer2(gl);
 
-*/
+
     gl.glClear(GL2.GL_COLOR_BUFFER_BIT);
-
-    // Draw the shape on the right
-    playe1.drawBar(gl);
-
-    // Draw the shape on the left
-    player2.drawBar(gl);
-
+    game.drawAll(gl);
 /*
     gl.glColor3f(0.0f, 0.0f, 1.0f);
     gl.glScalef(0.5f, 0.5f, 0.0f); // resize to 50%
@@ -74,8 +67,8 @@ Player playe1,player2;
 public Renderer(){
 
   // Start a game loop (for demonstration purposes)
-playe1=new Player(-0.9f);
-player2=new Player(0.9f);
+
+  game=new Game();
 }
 
 
@@ -86,23 +79,38 @@ player2=new Player(0.9f);
     if (leftPaddleUp) {
       // Move left paddle up
       // Add your logic here to update the left paddle position
-      playe1.moveUp();
+      game.playe1.moveUp();
     } else if (leftPaddleDown) {
       // Move left paddle down
       // Add your logic here to update the left paddle position
-      playe1.movedown();
+      game.playe1.movedown();
     }
 
     // Update right paddle position
     if (rightPaddleUp) {
       // Move right paddle up
       // Add your logic here to update the right paddle position
-    player2.moveUp();
+      game.player2.moveUp();
     } else if (rightPaddleDown) {
       // Move right paddle down
       // Add your logic here to update the right paddle position
-      player2.movedown();
+      game.player2.movedown();
     }
+  }
+}
+class Game{
+  final Player playe1;
+  final Player player2;
+  public Game(){
+
+    // Start a game loop (for demonstration purposes)
+    playe1=new Player(-0.9f);
+    player2=new Player(0.9f);
+  }
+  public void drawAll(GL2 gl)
+  {
+    playe1.drawBar(gl);
+    player2.drawBar(gl);
   }
 }
 class Player{
@@ -123,7 +131,8 @@ class Player{
           0.01f, 0.05f, -0.01f, -0.05f, -0.01f, -0.05f,
           0.01f };
 
-  float[] score3Data = { 0.06f, 0.1f, 0.04f, 0.1f, 0.04f, -0.1f, 0.06f,
+  float[] score3Data =
+          { 0.06f, 0.1f, 0.04f, 0.1f, 0.04f, -0.1f, 0.06f,
           -0.1f, 0.05f, 0.1f, 0.05f, 0.08f, -0.05f, 0.08f, -0.05f, 0.1f,
           0.05f, -0.08f, 0.05f, -0.1f, -0.05f, -0.1f, -0.05f, -0.08f, 0.05f,
           0.01f, 0.05f, -0.01f, -0.05f, -0.01f, -0.05f, 0.01f};
