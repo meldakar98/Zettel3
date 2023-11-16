@@ -124,7 +124,7 @@ class Game{
   class Ball{
 
     float[] ballData = { 0.02f, 0.02f, -0.02f, 0.02f, -0.02f, -0.02f, 0.02f, -0.02f };
-    float x=0,y=0,deltax=0.01f,deltay=0.01f;
+    float x=0,y=0,deltax=0.005f,deltay=0.005f;
     public Ball(){
       float i=1.0f;
       if(Math.random()>0.5)
