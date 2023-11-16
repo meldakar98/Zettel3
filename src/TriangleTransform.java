@@ -129,14 +129,16 @@ class Game{
       x+=deltax;
       //y+=deltay;
       if(x>0.85f||x<-0.85f) {
-        if(playe1.intersects(this)||player2.intersects(this)) {
+        if (player2.intersects(this)) {
+
           deltax *= -1;
-        }
-        else {
-          if(x>0.85f)
+        } else if (playe1.intersects(this)) {
+          deltax *= -1;
+        } else {
+          if (x > 0.85f)
             player2.score++;
           else playe1.score++;
-          deltax*=-1;
+          deltax *= -1;
         }
       }
       if(y>0.9f||y<-0.9f)
@@ -191,10 +193,23 @@ class Player{
   int score=0;
   float x,y;
 
-
+  float minX=barData[0],minY=barData[1],maxX=barData[0],maxY=barData[1];
   public Player(float x)
   {
     this.x=x;
+    for (int i = 0; i < barData.length-1; i+=2) {
+      if(minX>barData[i])
+        minX=barData[i];
+      if(maxX<barData[i])
+        maxX=barData[i];
+      if(minY>barData[i+1])
+        minY=barData[i+1];
+      if(maxY<barData[i+1])
+        minX=barData[i+1];
+    }
+
+    System.out.println(minX+"\n"+ maxX+"\n"+minY+"\n"+ maxY+"\n");
+
   }
   public void moveUp()
   {
@@ -253,6 +268,13 @@ class Player{
   }
 
   public boolean intersects(Game.Ball ball) {
+    if(ball.x>=this.x+minX-0.05&&ball.x<=this.x+maxX+0.05)
+    {
+      System.out.println("here");
+      if(ball.y>=this.y+minY-0.05&&ball.y<=this.y+maxY+0.05)
+        return true;
+      System.out.println("here too");
+    }
     return false;
   }
 }
