@@ -126,8 +126,14 @@ class Game{
     float[] ballData = { 0.02f, 0.02f, -0.02f, 0.02f, -0.02f, -0.02f, 0.02f, -0.02f };
     float x=0,y=0,deltax=0.01f,deltay=0.01f;
     public Ball(){
-      x= (float) Math.random()/2;
-      y= (float) Math.random()/2;
+      float i=1.0f;
+      if(Math.random()>0.5)
+        i*=-1f;
+      x= i*(float) Math.random()/2f;
+
+      if(Math.random()<0.5)
+        i*=-1f;
+      y= i*(float) (Math.random()/2f);
     }
     public void move()
 
@@ -276,10 +282,8 @@ class Player{
   public boolean intersects(Game.Ball ball) {
     if(ball.x>=this.x+minX-0.05&&ball.x<=this.x+maxX+0.05)
     {
-      System.out.println("here");
       if(ball.y>=this.y+minY-0.05&&ball.y<=this.y+maxY+0.05)
         return true;
-      System.out.println("here too");
     }
     return false;
   }
