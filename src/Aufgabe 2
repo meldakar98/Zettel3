@@ -1,0 +1,19 @@
+1- 3D Grafikkarten : die sind für die verarbeitung von Grafiken optimiert
+ihre funktionalität umfasst auch die Ausführung von 3D Grafiken auf 2D Bildschirme
+mit schlüssel Operationen wie Vertextransformation, Rasterisierung und shader programmierung
+
+die GPU hat mehrere Rechenkompenente die parallele verarbeitung
+von Datenströmungen erlauben. was das Rendern von komplexe Szenen erlaubt
+
+2-ja es spielt eine Rolle , eine translation vor skalierung oder rotation
+führt zu andere ergebnisse als wenn man erst skaliert oder rotiert
+und dann erst transeliert
+wenn man die translation als + darstellen kann und skalierung als skalar product
+dann ist a*(v + t) ist ungleicht t+(v+a) wo v und t vektoren sind
+und a eine reele zahl ist.
+
+3-
+homogene koordinaten sind form von 3D Koordinaten die aus 4 komponenten bestehen
+(x,y,z,1)
+die ermöglichen eine einheitliche matrix operation für alle transformationen
+was die Prespektivische Projektion vereinfachen kann
