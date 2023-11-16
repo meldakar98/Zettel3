@@ -127,13 +127,13 @@ class Game{
 
     {
       x+=deltax;
-      y+=deltay;
-      if(x>0.9f||x<-0.9f) {
+      //y+=deltay;
+      if(x>0.85f||x<-0.85f) {
         if(playe1.intersects(ball)) {
           deltax *= -1;
         }
         else {
-          if(x>0.9f)
+          if(x>0.85f)
             player2.score++;
           else playe1.score++;
           deltax*=-1;
