@@ -70,11 +70,13 @@ public Renderer(){
 
   game=new Game();
 }
-
+  public boolean start=false;
 
   public void dispose(GLAutoDrawable d) {}
 
   void updateGameState() {
+    if(!start)
+      return;
     // Update left paddle position
     if (leftPaddleUp) {
       // Move left paddle up
@@ -123,11 +125,15 @@ class Game{
 
     float[] ballData = { 0.02f, 0.02f, -0.02f, 0.02f, -0.02f, -0.02f, 0.02f, -0.02f };
     float x=0,y=0,deltax=0.01f,deltay=0.01f;
+    public Ball(){
+      x= (float) Math.random()/2;
+      y= (float) Math.random()/2;
+    }
     public void move()
 
     {
       x+=deltax;
-      //y+=deltay;
+      y+=deltay;
       if(x>0.85f||x<-0.85f) {
         if (player2.intersects(this)) {
 
@@ -136,8 +142,8 @@ class Game{
           deltax *= -1;
         } else {
           if (x > 0.85f)
-            player2.score++;
-          else playe1.score++;
+            playe1.score++;
+          else player2.score++;
           deltax *= -1;
         }
       }
@@ -284,6 +290,7 @@ class MyGui extends JFrame implements GLEventListener,KeyListener {
   private Renderer renderer;
   
   public void createGUI() {
+
     setTitle("TriangleTransform");
     setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
    
@@ -304,6 +311,8 @@ class MyGui extends JFrame implements GLEventListener,KeyListener {
       public void actionPerformed(ActionEvent e) {
         // Update the game state based on paddle movement
         renderer.updateGameState();
+        if(renderer.game.playe1.score==3||renderer.game.player2.score==3)
+          createGUI();
 
       }
     });
@@ -340,6 +349,10 @@ class MyGui extends JFrame implements GLEventListener,KeyListener {
       renderer.game.playe1.score=renderer.game.playe1.score%4;
       System.out.println(renderer.game.playe1.score);
 
+    }
+    else if(e.getKeyChar()==KeyEvent.VK_SPACE) {
+
+      renderer.start=true;
     }
   }
   @Override
