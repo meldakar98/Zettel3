@@ -96,6 +96,7 @@ public Renderer(){
       // Add your logic here to update the right paddle position
       game.player2.movedown();
     }
+    game.ball.move();
   }
 }
 class Game{
@@ -118,29 +119,50 @@ class Game{
     ball.draw(gl);
 
   }
+  class Ball{
 
+    float[] ballData = { 0.02f, 0.02f, -0.02f, 0.02f, -0.02f, -0.02f, 0.02f, -0.02f };
+    float x=0,y=0,deltax=0.01f,deltay=0.01f;
+    public void move()
 
-}
-class Ball{
+    {
+      x+=deltax;
+      y+=deltay;
+      if(x>0.9f||x<-0.9f) {
+        if(playe1.intersects(ball)) {
+          deltax *= -1;
+        }
+        else {
+          if(x>0.9f)
+            player2.score++;
+          else playe1.score++;
+          deltax*=-1;
+        }
+      }
+      if(y>0.9f||y<-0.9f)
+        deltay*=-1;
 
-  float[] ballData = { 0.02f, 0.02f, -0.02f, 0.02f, -0.02f, -0.02f, 0.02f, -0.02f };
-  float x=0,y=0,deltax=0.01f,deltay=0.01f;
-  public void draw(GL2 gl)
-  {
-
-    gl.glLoadIdentity();
-    gl.glTranslatef(x, 0, 0); // Translate to the right
-    gl.glBegin(GL_QUADS);
-
-    for (int i = 0; i < ballData.length-1; i+=2) {
-
-      gl.glVertex3f(ballData[i], ballData[i+1]+y, 0.0f);
     }
-    ; // translate
-    gl.glEnd();
+    public void draw(GL2 gl)
+    {
+
+      gl.glLoadIdentity();
+      gl.glTranslatef(x, y, 0); // Translate to the right
+      gl.glBegin(GL_QUADS);
+
+      for (int i = 0; i < ballData.length-1; i+=2) {
+
+        gl.glVertex3f(ballData[i], ballData[i+1], 0.0f);
+      }
+      ; // translate
+      gl.glEnd();
+    }
+
   }
 
+
 }
+
 class Player{
 
   float[] score0Data = { 0.06f, 0.1f, 0.04f, 0.1f, 0.04f, -0.1f, 0.06f,
@@ -184,6 +206,7 @@ class Player{
   }
   void drawScore(GL2 gl)
   {
+    score=score%4;
     float[] data;
     if(score==0)
       data=score0Data;
@@ -228,6 +251,10 @@ class Player{
     ; // translate
     gl.glEnd();
   }
+
+  public boolean intersects(Game.Ball ball) {
+    return false;
+  }
 }
 
 class MyGui extends JFrame implements GLEventListener,KeyListener {
@@ -255,6 +282,7 @@ class MyGui extends JFrame implements GLEventListener,KeyListener {
       public void actionPerformed(ActionEvent e) {
         // Update the game state based on paddle movement
         renderer.updateGameState();
+
       }
     });
     timer.start();
